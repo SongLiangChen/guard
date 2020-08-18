@@ -2,8 +2,8 @@
 
 PRONAME="node"
 
-BIN=/usr/local/src/guard/node
-STDLOG=/usr/local/src/guard/output.log
+BIN=/data/apps/guard/node
+STDLOG=/data/apps/guard/output.log
 
 
 chmod u+x $BIN
