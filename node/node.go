@@ -15,19 +15,23 @@ import (
 )
 
 var (
-	alterTempleProcessShutDown = `服务器[%v]
+	alterTempleProcessShutDown = `进程异常
+服务器[%v]
 进程[%v]
 多次尝试重启失败，请立刻排查`
 
-	alterTempleProcessRestart = `服务器[%v]
+	alterTempleProcessRestart = `进程异常
+服务器[%v]
 进程[%v]
 重启成功`
 
-	alterTempleCPU = `服务器[%v]
+	alterTempleCPU = `进程异常
+服务器[%v]
 进程[%v]
 当前CPU使用率[%v]大于阈值百分之[%v]`
 
-	alterTempleMEM = `服务器[%v]
+	alterTempleMEM = `进程异常
+服务器[%v]
 进程[%v]
 当前MEM使用率[%v]大于阈值百分之[%v]`
 )
@@ -100,7 +104,7 @@ func goOnPatrol(ps []*model.Process, exit, exited chan bool) {
 				if s.Pid == "" {
 					cnt[p.Name]++
 					if cnt[p.Name] >= 3 {
-						FeishuAlert(fmt.Sprintf(alterTempleProcessShutDown, hostname, p.Name))
+						DingDingAlert(fmt.Sprintf(alterTempleProcessShutDown, hostname, p.Name))
 					}
 
 					if p.RestartSh != "" {
@@ -118,15 +122,15 @@ func goOnPatrol(ps []*model.Process, exit, exited chan bool) {
 					continue
 				}
 				if cnt[p.Name] >= 3 {
-					FeishuAlert(fmt.Sprintf(alterTempleProcessRestart, hostname, p.Name))
+					DingDingAlert(fmt.Sprintf(alterTempleProcessRestart, hostname, p.Name))
 				}
 				cnt[p.Name] = 0
 
 				if p.MaxCPU < s.CPU {
-					FeishuAlert(fmt.Sprintf(alterTempleCPU, hostname, p.Name, s.CPU, p.MaxCPU))
+					DingDingAlert(fmt.Sprintf(alterTempleCPU, hostname, p.Name, s.CPU, p.MaxCPU))
 				}
 				if p.MaxMem < s.MEM {
-					FeishuAlert(fmt.Sprintf(alterTempleMEM, hostname, p.Name, s.MEM, p.MaxMem))
+					DingDingAlert(fmt.Sprintf(alterTempleMEM, hostname, p.Name, s.MEM, p.MaxMem))
 				}
 			}
 		}
@@ -134,6 +138,30 @@ func goOnPatrol(ps []*model.Process, exit, exited chan bool) {
 
 FINISH:
 	exited <- true
+}
+
+func DingDingAlert(content string) {
+	alert := config.GetConfig().Section("system").Key("alert").MustInt(0)
+	if alert == 0 {
+		return
+	}
+
+	var urlStr = `https://oapi.dingtalk.com/robot/send?access_token=5226f0309f4431b35ffaa0939e6d11665243b21de8650aefcfdcf3f5932196be`
+
+	data := make(map[string]interface{})
+	data["msgtype"] = "text"
+	data["text"] = map[string]string{
+		"content": content,
+	}
+	buf, _ := json.Marshal(data)
+
+	agent := common.NewHttpAgent()
+	_, buf, err := agent.Post(urlStr).ContentType(common.TypeJSON).Timeout(3 * time.Second).SendData(buf).End()
+	if err != nil {
+		println(err.Error())
+	} else {
+		println(string(buf))
+	}
 }
 
 func FeishuAlert(content string) {

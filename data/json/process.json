@@ -1,0 +1,26 @@
+[
+  {
+    "name": "\\/data\\/apps\\/x-man-chat\\/chat",
+    "maxCPU": 25,
+    "maxMEM": 25,
+    "restartSh": "cd /data/apps/x-man-chat && sh restart.sh chat"
+  },
+  {
+    "name": "\\/data\\/apps\\/x-man-gateway\\/gateway",
+    "maxCPU": 25,
+    "maxMEM": 25,
+    "restartSh": "cd /data/apps/x-man-gateway && sh restart.sh gateway"
+  },
+  {
+    "name": "\\/data\\/apps\\/x-man-api\\/api",
+    "maxCPU": 25,
+    "maxMEM": 25,
+    "restartSh": "cd /data/apps/x-man-api && sh restart.sh api"
+  },
+  {
+    "name": "\\/data\\/apps\\/x-man-tasks\\/tasks",
+    "maxCPU": 25,
+    "maxMEM": 25,
+    "restartSh": "cd /data/apps/x-man-tasks && sh restart.sh tasks"
+  }
+]
