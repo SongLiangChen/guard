@@ -79,7 +79,7 @@ func main() {
 }
 
 func goOnPatrol(ps []*model.Process, exit, exited chan bool) {
-	ticker := time.NewTicker(time.Second * 3)
+	ticker := time.NewTicker(time.Second * 10)
 	defer ticker.Stop()
 
 	cnt := make(map[string]int)
