@@ -1,3 +1,7 @@
+cd node
+go build
+cd ..
+
 TAR_FILE=node.tar.gz
 tar -czvf $TAR_FILE ./node/node ./data restart_node.sh
 
