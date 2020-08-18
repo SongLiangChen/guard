@@ -109,12 +109,12 @@ func goOnPatrol(ps []*model.Process, exit, exited chan bool) {
 
 					if p.RestartSh != "" {
 						println(p.Name, "进程未启动，尝试启动...")
-						if err := cmd.RestartProcess(p.RestartSh); err != nil {
-							println(p.Name, "重启失败...", err.Error())
-							continue
-						}
+						_ = cmd.RestartProcess(p.RestartSh)
+						time.Sleep(time.Second)
 						if ts := cmd.GetProcessStat(p.Name); ts != nil && ts.Pid != "" {
 							println(p.Name, "启动成功")
+						} else {
+							println(p.Name, "启动失败")
 						}
 						continue
 					}
