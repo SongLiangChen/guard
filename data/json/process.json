@@ -15,7 +15,7 @@
     "name": "\\/data\\/apps\\/x-man-api\\/api",
     "maxCPU": 25,
     "maxMEM": 25,
-    "restartSh": "cd /data/apps/x-man-api && sh restart.sh api"
+    "restartSh": "cd /data/apps/x-man-api && echo hello"
   },
   {
     "name": "\\/data\\/apps\\/x-man-tasks\\/tasks",

@@ -87,7 +87,7 @@ func goOnPatrol(ps []*model.Process, exit, exited chan bool) {
 	defer ticker.Stop()
 
 	cnt := make(map[string]int)
-	hostname, _ := os.Hostname()
+	hostname := os.Getenv("RUNMODE")
 
 	for {
 		select {
