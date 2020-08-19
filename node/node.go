@@ -110,10 +110,12 @@ func goOnPatrol(ps []*model.Process, exit, exited chan bool) {
 					if p.RestartSh != "" {
 						println(p.Name, "进程未启动，尝试启动...")
 						_ = cmd.RestartProcess(p.RestartSh)
+
 						time.Sleep(time.Second)
 						if ts := cmd.GetProcessStat(p.Name); ts != nil && ts.Pid != "" {
 							println(p.Name, "启动成功")
 						} else {
+							cnt[p.Name]++
 							println(p.Name, "启动失败")
 						}
 						continue
@@ -170,7 +172,7 @@ func FeishuAlert(content string) {
 		return
 	}
 
-	var urlStr = `https://open.feishu.cn/open-apis/bot/hook/83539f7005d94e83b6712d1329d7e83b`
+	var urlStr = ``
 
 	data := make(map[string]string)
 	data["title"] = "服务进程异常"
